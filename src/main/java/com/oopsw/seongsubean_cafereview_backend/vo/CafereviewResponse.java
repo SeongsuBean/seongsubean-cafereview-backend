@@ -1,0 +1,14 @@
+package com.oopsw.seongsubean_cafereview_backend.vo;
+
+import lombok.Data;
+
+@Data
+public class CafereviewResponse {
+  private Long cafeId;
+  private Long userId;
+  private String userImageUrl;
+  private String imageUrl;
+  private String nickName;
+  private String content;
+  private int rating;
+}
