@@ -8,13 +8,7 @@ import java.util.List;
 import java.util.Map;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController            // ← 여기서 S 제거!
 @RequestMapping("/api/cafes")
@@ -65,6 +59,16 @@ public class CafeReviewController {
     List<CafeReviewDto> reviews = cafeReviewService.getReviewsByUser(nickName);
     return ResponseEntity.ok(reviews);
   }
+
+  @GetMapping("/reviews")
+  public ResponseEntity<List<CafeReviewDto>> getPagedReviews(
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "2") int size
+  ) {
+    List<CafeReviewDto> pagedReviews = cafeReviewService.getPagedReviews(page, size);
+    return ResponseEntity.ok(pagedReviews);
+  }
+
 
   @DeleteMapping("/users/{userId}/reviews/{reviewId}")
   public ResponseEntity<Boolean> deleteReview(

@@ -10,6 +10,10 @@ import com.oopsw.seongsubean_cafereview_backend.vo.CafeRatingSummary;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -52,6 +56,18 @@ public class CafeReviewImpl implements CafeReviewService {
         .map(entity -> mapper.map(entity, CafeReviewDto.class))
         .collect(Collectors.toList());
   }
+
+
+  @Override
+  public List<CafeReviewDto> getPagedReviews(int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("reviewId").descending());
+    Page<CafeReviewEntity> pagedEntities = cafeReviewRepository.findAll(pageable);
+
+    return pagedEntities.stream()
+            .map(entity -> mapper.map(entity, CafeReviewDto.class))
+            .collect(Collectors.toList());
+  }
+
 
   @Override
   public boolean deleteCafeReview(Long userId, Long reviewId) {
