@@ -20,4 +20,7 @@ CafeReviewEntity getByCafeIdAndReviewId(Long CafeId, Long userId);
           "ORDER BY AVG(rating) DESC " +
           "LIMIT 5", nativeQuery = true)
   List<Long> findTop5CafeIdsByRating();
+
+  @Query("SELECT AVG(r.rating), COUNT(r) FROM CafeReviewEntity r WHERE r.cafeId = :cafeId")
+  Object[] findAvgScoreAndCountByCafeId(Long cafeId);
 }
