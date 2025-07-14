@@ -5,7 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,4 +44,12 @@ public class CafeReviewEntity {
 
   @Column(name = "rating", nullable = false)
   private Integer rating;
+
+  @Column(name = "review_date", nullable = false)
+  private LocalDateTime reviewDate;
+
+  @PrePersist
+  protected void onCreate() {
+    reviewDate = LocalDateTime.now();
+  }
 }
