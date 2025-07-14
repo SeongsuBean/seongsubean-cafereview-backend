@@ -1,39 +1,39 @@
-//package com.oopsw.seongsubean_cafereview_backend.service;
-//
-//import com.oopsw.seongsubean_cafereview_backend.dto.CafeReviewDto;
-//import com.oopsw.seongsubean_cafereview_backend.jpa.CafeReviewEntity;
-//
-//import static org.assertj.core.api.Assertions.assertThat;
-//import static org.assertj.core.api.Assertions.assertThatThrownBy;
-//
-//import com.oopsw.seongsubean_cafereview_backend.repository.CafeReviewRepository;
-//import java.util.List;
-//import lombok.extern.slf4j.Slf4j;
-//import org.junit.jupiter.api.Assertions;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.TestMethodOrder;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.dao.InvalidDataAccessApiUsageException;
-//import org.springframework.transaction.annotation.Transactional;
-//
-//@SpringBootTest
-//@Slf4j
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-//@TestMethodOrder(OrderAnnotation.class)
-//@Transactional
-//
-//class CafeReviewServiceTest {
-//
-//  @Autowired
-//  private CafeReviewRepository cafeReviewRepository;
-//  @Autowired
-//  private CafeReviewImpl cafeReviewImpl;
-//  @Autowired
-//  private CafeReviewService cafeReviewService;
+package com.oopsw.seongsubean_cafereview_backend.service;
+
+import com.oopsw.seongsubean_cafereview_backend.dto.CafeReviewDto;
+import com.oopsw.seongsubean_cafereview_backend.jpa.CafeReviewEntity;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.oopsw.seongsubean_cafereview_backend.repository.CafeReviewRepository;
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.transaction.annotation.Transactional;
+
+@SpringBootTest
+@Slf4j
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestMethodOrder(OrderAnnotation.class)
+@Transactional
+
+class CafeReviewServiceTest {
+
+  @Autowired
+  private CafeReviewRepository cafeReviewRepository;
+  @Autowired
+  private CafeReviewImpl cafeReviewImpl;
+  @Autowired
+  private CafeReviewService cafeReviewService;
 //
 //  @BeforeEach
 //  void setUp() {
@@ -214,6 +214,31 @@
 //
 //
 //
-//
-//}
+    @Test
+    @Transactional
+    void getTop5CafeIdsByRatingTest() {
+        // Given: 다양한 평점과 카페ID로 리뷰 생성
+        for (long cafeId = 100; cafeId <= 106; cafeId++) {
+            for (int i = 0; i < 3; i++) {
+                cafeReviewRepository.save(
+                        CafeReviewEntity.builder()
+                                .cafeId(cafeId)
+                                .userId(10L + i)
+                                .nickName("user" + i)
+                                .content("테스트 리뷰")
+                                .rating(3 + i) // 3~5점
+                                .build()
+                );
+            }
+        }
+
+        // When
+        List<Long> top5 = cafeReviewService.getTop5CafeIdsByRating();
+
+        // Then
+        assertThat(top5).isNotNull();
+        assertThat(top5.size()).isEqualTo(5);
+        top5.forEach(id -> System.out.println("🎯 Top5 cafeId: " + id));
+    }
+}
 //

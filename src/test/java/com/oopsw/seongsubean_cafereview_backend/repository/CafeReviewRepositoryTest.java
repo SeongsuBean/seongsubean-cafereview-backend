@@ -1,34 +1,41 @@
-//package com.oopsw.seongsubean_cafereview_backend.repository;
-//
-//import com.oopsw.seongsubean_cafereview_backend.jpa.CafeReviewEntity;
-//
-//import static org.assertj.core.api.Assertions.assertThat;
-//import static org.assertj.core.api.Assertions.assertThatThrownBy;
-//
-//import java.util.List;
-//import java.util.Optional;
-//import lombok.extern.slf4j.Slf4j;
-//import org.junit.jupiter.api.Assertions;
-//import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-//import org.junit.jupiter.api.Order;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.TestMethodOrder;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-//import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-//import org.springframework.dao.DataIntegrityViolationException;
-//import org.springframework.dao.EmptyResultDataAccessException;
-//import org.springframework.transaction.annotation.Transactional;
-//
-//@DataJpaTest
-//@Slf4j
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-//@TestMethodOrder(OrderAnnotation.class)
-//@Transactional
-//
-//public class CafeReviewRepositoryTest {
-//  @Autowired
-//  private CafeReviewRepository cafeReviewRepository;
+package com.oopsw.seongsubean_cafereview_backend.repository;
+
+import com.oopsw.seongsubean_cafereview_backend.jpa.CafeReviewEntity;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.transaction.annotation.Transactional;
+
+@DataJpaTest
+@Slf4j
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestMethodOrder(OrderAnnotation.class)
+@Transactional
+
+public class CafeReviewRepositoryTest {
+    @Autowired
+    private CafeReviewRepository cafeReviewRepository;
+
+
+    @Autowired
+    private TestEntityManager em;
+
 //
 //  @Test
 //  public void addCafeReviewRepositoryTest_Success() {
@@ -211,4 +218,31 @@
 //    }).isInstanceOf(EmptyResultDataAccessException.class);
 //  }
 //
+
+    @Test
+    void findTop5CafeIdsByRatingTest() {
+        // Given: 각기 다른 카페 ID에 대해 리뷰 추가
+        for (long cafeId = 1; cafeId <= 6; cafeId++) {
+            for (int i = 0; i < 2; i++) {
+                CafeReviewEntity review = CafeReviewEntity.builder()
+                        .cafeId(cafeId)
+                        .userId(100L + i)
+                        .nickName("user" + i)
+                        .content("맛있어요!")
+                        .rating((int) (Math.random() * 5 + 1)) // 1~5 랜덤
+                        .build();
+                em.persist(review);
+            }
+        }
+        em.flush();
+
+        // When
+        List<Long> top5 = cafeReviewRepository.findTop5CafeIdsByRating();
+
+        // Then
+        assertThat(top5).isNotEmpty();
+        assertThat(top5.size()).isEqualTo(5);
+        top5.forEach(id -> System.out.println("✅ 상위 카페 ID: " + id));
+    }
+}
 //}

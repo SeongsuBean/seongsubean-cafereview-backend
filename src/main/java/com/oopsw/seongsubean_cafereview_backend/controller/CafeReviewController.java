@@ -2,6 +2,7 @@ package com.oopsw.seongsubean_cafereview_backend.controller;
 
 import com.oopsw.seongsubean_cafereview_backend.dto.CafeReviewDto;
 import com.oopsw.seongsubean_cafereview_backend.service.CafeReviewService;
+import com.oopsw.seongsubean_cafereview_backend.vo.CafeRatingSummary;
 import com.oopsw.seongsubean_cafereview_backend.vo.CafeReviewRequest;
 import java.util.List;
 import java.util.Map;
@@ -76,4 +77,15 @@ public class CafeReviewController {
     boolean deleted = cafeReviewService.deleteCafeReview(userId, reviewId);
     return ResponseEntity.ok(deleted);
   }
+
+  @GetMapping("/ranking")
+  public ResponseEntity<List<Long>> getTop5Cafes() {
+    return ResponseEntity.ok(cafeReviewService.getTop5CafeIdsByRating());
+  }
+
+//  // 2. 특정 카페 리뷰 통계
+//  @GetMapping("/summary/{cafeId}")
+//  public ResponseEntity<CafeRatingSummary> getSummary(@PathVariable Long cafeId) {
+//    return ResponseEntity.ok(reviewService.getRatingSummary(cafeId));
+//  }
 }
