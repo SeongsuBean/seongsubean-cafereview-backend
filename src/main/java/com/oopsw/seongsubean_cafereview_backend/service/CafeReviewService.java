@@ -12,5 +12,7 @@ public interface CafeReviewService {
 
   List<CafeReviewDto> getReviewsByUser(String nickName);
 
+  List<CafeReviewDto> getPagedReviews(int page, int size);
+
   boolean deleteCafeReview(Long userId, Long reviewId);
 }
