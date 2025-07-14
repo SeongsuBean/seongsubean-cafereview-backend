@@ -1,6 +1,8 @@
 package com.oopsw.seongsubean_cafereview_backend.service;
 
 import com.oopsw.seongsubean_cafereview_backend.dto.CafeReviewDto;
+import com.oopsw.seongsubean_cafereview_backend.vo.CafeRatingSummary;
+
 import java.util.List;
 
 public interface CafeReviewService {
@@ -13,4 +15,6 @@ public interface CafeReviewService {
   List<CafeReviewDto> getReviewsByUser(String nickName);
 
   boolean deleteCafeReview(Long userId, Long reviewId);
+
+  List<Long> getTop5CafeIdsByRating();
 }

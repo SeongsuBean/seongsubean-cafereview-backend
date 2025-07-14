@@ -5,8 +5,11 @@ import com.oopsw.seongsubean_cafereview_backend.jpa.CafeReviewEntity;
 import com.oopsw.seongsubean_cafereview_backend.repository.CafeReviewRepository;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.oopsw.seongsubean_cafereview_backend.vo.CafeRatingSummary;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -54,5 +57,10 @@ public class CafeReviewImpl implements CafeReviewService {
   public boolean deleteCafeReview(Long userId, Long reviewId) {
     cafeReviewRepository.delete(cafeReviewRepository.getByCafeIdAndReviewId(userId,reviewId));
     return true;
+  }
+
+  @Override
+  public List<Long> getTop5CafeIdsByRating() {
+    return cafeReviewRepository.findTop5CafeIdsByRating();
   }
 }
