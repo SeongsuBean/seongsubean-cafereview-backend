@@ -10,7 +10,7 @@ public interface CafeReviewService {
 
   List<CafeReviewDto> getCafeReviews(Long cafeId);
 
-  List<CafeReviewDto> getReviewsByUser(Long userId);
+  List<CafeReviewDto> getReviewsByUser(String nickName);
 
   boolean deleteCafeReview(Long userId, Long reviewId);
 }

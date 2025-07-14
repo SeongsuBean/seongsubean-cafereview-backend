@@ -59,10 +59,10 @@ public class CafeReviewController {
     return ResponseEntity.ok(list);
   }
 
-  @GetMapping("/users/{userId}/reviews")
-  public ResponseEntity<List<CafeReviewDto>> getReviewsByUser(@PathVariable Long userId) {
-    List<CafeReviewDto> list = cafeReviewService.getReviewsByUser(userId);
-    return ResponseEntity.ok(list);
+  @GetMapping("/users/{nickName}")
+  public ResponseEntity<List<CafeReviewDto>> getByUserNick(@PathVariable String nickName) {
+    List<CafeReviewDto> reviews = cafeReviewService.getReviewsByUser(nickName);
+    return ResponseEntity.ok(reviews);
   }
 
   @DeleteMapping("/users/{userId}/reviews/{reviewId}")

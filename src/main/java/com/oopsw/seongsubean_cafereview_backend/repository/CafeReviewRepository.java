@@ -9,5 +9,6 @@ CafeReviewEntity getByCafeIdAndReviewId(Long CafeId, Long userId);
 
   List<CafeReviewEntity> findAllByCafeId(Long cafeId);
 
-  List<CafeReviewEntity> findAllByUserId(Long userId);
+  List<CafeReviewEntity> findAllByNickName(String nickName);
+
 }

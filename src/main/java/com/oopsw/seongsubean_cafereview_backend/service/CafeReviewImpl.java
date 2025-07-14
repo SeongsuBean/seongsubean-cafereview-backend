@@ -40,9 +40,12 @@ public class CafeReviewImpl implements CafeReviewService {
         .collect(Collectors.toList());
   }
 
+
   @Override
-  public List<CafeReviewDto> getReviewsByUser(Long userId) {
-    return cafeReviewRepository.findAllByUserId(userId).stream()
+  public List<CafeReviewDto> getReviewsByUser(String nickName) {
+    return cafeReviewRepository
+        .findAllByNickName(nickName)
+        .stream()
         .map(entity -> mapper.map(entity, CafeReviewDto.class))
         .collect(Collectors.toList());
   }
