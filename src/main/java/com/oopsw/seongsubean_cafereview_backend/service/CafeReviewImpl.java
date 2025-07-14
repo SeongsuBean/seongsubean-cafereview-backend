@@ -3,6 +3,8 @@ package com.oopsw.seongsubean_cafereview_backend.service;
 import com.oopsw.seongsubean_cafereview_backend.dto.CafeReviewDto;
 import com.oopsw.seongsubean_cafereview_backend.jpa.CafeReviewEntity;
 import com.oopsw.seongsubean_cafereview_backend.repository.CafeReviewRepository;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,5 +80,36 @@ public class CafeReviewImpl implements CafeReviewService {
   @Override
   public List<Long> getTop5CafeIdsByRating() {
     return cafeReviewRepository.findTop5CafeIdsByRating();
+  }
+
+  @Override
+  public CafeRatingSummary getRatingSummary(Long cafeId) {
+    Object[] rawResult = cafeReviewRepository.findAvgScoreAndCountByCafeId(cafeId);
+
+    if (rawResult == null || rawResult.length == 0 || !(rawResult[0] instanceof Object[])) {
+      return CafeRatingSummary.builder()
+              .cafeId(cafeId)
+              .averageScore(0.0)
+              .reviewCount(0L)
+              .build();
+    }
+
+    Object[] result = (Object[]) rawResult[0];
+
+    System.out.println("🔥 내부 result = " + Arrays.toString(result));
+
+    if (result.length < 2 || result[0] == null || result[1] == null) {
+      return CafeRatingSummary.builder()
+              .cafeId(cafeId)
+              .averageScore(0.0)
+              .reviewCount(0L)
+              .build();
+    }
+
+    return CafeRatingSummary.builder()
+            .cafeId(cafeId)
+            .averageScore(((Number) result[0]).doubleValue())
+            .reviewCount(((Number) result[1]).longValue())
+            .build();
   }
 }

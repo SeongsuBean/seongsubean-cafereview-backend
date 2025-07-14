@@ -19,4 +19,6 @@ public interface CafeReviewService {
   boolean deleteCafeReview(Long userId, Long reviewId);
 
   List<Long> getTop5CafeIdsByRating();
+
+  CafeRatingSummary getRatingSummary(Long cafeId);
 }

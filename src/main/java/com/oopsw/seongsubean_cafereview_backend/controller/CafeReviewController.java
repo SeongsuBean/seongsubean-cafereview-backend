@@ -83,9 +83,8 @@ public class CafeReviewController {
     return ResponseEntity.ok(cafeReviewService.getTop5CafeIdsByRating());
   }
 
-//  // 2. 특정 카페 리뷰 통계
-//  @GetMapping("/summary/{cafeId}")
-//  public ResponseEntity<CafeRatingSummary> getSummary(@PathVariable Long cafeId) {
-//    return ResponseEntity.ok(reviewService.getRatingSummary(cafeId));
-//  }
+  @GetMapping("/summary/{cafeId}")
+  public ResponseEntity<CafeRatingSummary> getSummary(@PathVariable Long cafeId) {
+    return ResponseEntity.ok(cafeReviewService.getRatingSummary(cafeId));
+  }
 }
